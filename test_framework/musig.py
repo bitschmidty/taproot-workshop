@@ -36,7 +36,7 @@ def generate_musig_key(pubkey_list):
     return musig_c, aggregate_key
 
 def aggregate_schnorr_nonces(nonce_point_list):
-    """Construct aggregated musig nonce from individually generated nonces."""
+    """Construct aggregated MuSig nonce from individually generated nonces."""
     R_agg = sum(nonce_point_list)
     R_agg_affine = SECP256K1.affine(R_agg.p)
     negated = False
@@ -58,7 +58,7 @@ def sign_musig(priv_key, k_key, R_musig, P_musig, msg):
     return (k_key.secret + e * priv_key.secret) % SECP256K1_ORDER
 
 def musig_digest(R_musig, P_musig, msg):
-    """Get the digest to sign for musig"""
+    """Get the digest to sign for MuSig"""
     return int.from_bytes(hashlib.sha256(R_musig.get_x().to_bytes(32, 'big') + P_musig.get_bytes() + msg).digest(), 'big') % SECP256K1_ORDER
 
 def aggregate_musig_signatures(s_list, R_musig):
